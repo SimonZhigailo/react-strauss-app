@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "react-strauss-tree-client-side-solution",
+    "id": "808536ac-6cac-45a8-9e80-f9759b1ba933",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "react-strauss-tree description"
+      },
+      "longDescription": {
+        "default": "react-strauss-tree description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "react-strauss-tree Feature",
+        "description": "The feature that activates elements of the react-strauss-tree solution.",
+        "id": "c620083f-7da3-4648-a29b-0abd204f8cfa",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/react-strauss-tree.sppkg"
+  }
+}

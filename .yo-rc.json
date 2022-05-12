@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "react-strauss-tree",
+    "libraryId": "808536ac-6cac-45a8-9e80-f9759b1ba933",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "react-strauss-tree",
+    "solutionShortDescription": "react-strauss-tree description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
