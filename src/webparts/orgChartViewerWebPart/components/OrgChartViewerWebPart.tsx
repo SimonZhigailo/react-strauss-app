@@ -13,7 +13,7 @@ import {
   Text,
 } from "office-ui-fabric-react";
 import { EOrgChartTypes } from "./EOrgChartTypes";
-import { IOrgChartItem, ChartItem } from './IOrgChartItem';
+import { ChartItem } from './IOrgChartItem';
 import { OrgChartReducer } from "./OrgChartReducer";
 import { IStackStyles, Stack } from "office-ui-fabric-react/lib/Stack";
 import { useOrgChartStyles } from "./useOrgChartStyles";
@@ -46,6 +46,7 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
       type: EOrgChartTypes.SET_CURRENT_USER,
       payload: selectedUser,
     });
+    console.log("onUserSelected", selectedUser);
   }, []);
 
   const {
@@ -75,6 +76,12 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
         renderManagersArray.forEach((element) => {
           wRenderManagers.push(
             <>
+              { element.Parent && 
+              <div
+                key={getGUID()}
+                className={orgChartClasses.separatorVertical}
+              ></div> 
+              }
               <PersonCard
                 key={getGUID()}
                 userInfo={element}
@@ -82,10 +89,6 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
                 selectedUser={currentUser}
                 showActionsBar={true}
               ></PersonCard>
-              <div
-                key={getGUID()}
-                className={orgChartClasses.separatorVertical}
-              ></div>
             </>
           );
         });
@@ -173,15 +176,14 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
   // }, [getUserProfile, startFromUserId]);
 
   React.useEffect(() => {
+    console.log("start in useEffect");
     (async () => {
-      if (!currentUser) return;
       dispatch({
         type: EOrgChartTypes.SET_IS_LOADING,
         payload: true,
       });
-
       const { userTree, wRenderManagers } = await loadOrgChart(
-        currentUser.email
+        currentUser ? currentUser.email : currentUserName
       );
       dispatch({
         type: EOrgChartTypes.SET_RENDER_MANAGERS,
@@ -192,6 +194,7 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
         payload: false,
       });
     })();
+    console.log(currentUser);
   }, [currentUser, loadOrgChart]);
   
 
@@ -235,15 +238,6 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
         </Stack>
         <Stack horizontalAlign="center" verticalAlign="center">
         {renderManagers}
-          {/* <PersonCard
-            key={getGUID()}
-            userInfo={currentUser}
-            onUserSelected={onUserSelected}
-            selectedUser={currentUser}
-          ></PersonCard>
-          {currentUser.Parent && <PersonCard key={getGUID()}
-            userInfo={currentUser.Parent}
-            onUserSelected={onUserSelected} />} */}
         </Stack>
         <Stack
           horizontal

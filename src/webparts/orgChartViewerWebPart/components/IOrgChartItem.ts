@@ -6,16 +6,20 @@ export interface IOrgChartItem {
     gg_last_name_ru?: string;
     gg_work_phone?: string;
     Director_full_nameId?: number;
-    gg_name_ru?: string;
+    gg_position?: gg_position;
     //ParentList/ImageUrl ссылка на img
 }
 
+export interface gg_position{
+    gg_name_ru?: string;
+}
+
 export class ChartItem {
-    id: number;
-    title: string;
-    firstName: string;
-    surName: string;
-    lastName: string;
+    id?: number;
+    title?: string;
+    firstName?: string;
+    surName?: string;
+    lastName?: string;
     email?: string;
     workPhone?: string;
     position?: string;

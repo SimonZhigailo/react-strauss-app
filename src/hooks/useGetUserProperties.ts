@@ -1,7 +1,7 @@
 // import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import { sp } from "@pnp/sp/";
 
-import { ChartItem, IOrgChartItem } from "../webparts/orgChartViewerWebPart/components/IOrgChartItem";
+import { ChartItem } from "../webparts/orgChartViewerWebPart/components/IOrgChartItem";
 import * as React from "react";
 
 type getUserProfileFunc = ( currentUser: string,
@@ -17,24 +17,25 @@ export const useGetUserProperties  =  ():  { getUserProfile:getUserProfileFunc }
     ): Promise<returnProfileData> => {
         var userTree: ChartItem;
         var renderManagersArray: ChartItem[];
-        const allItems: IOrgChartItem[] = await sp.web.lists.getByTitle("Сотрудники").items.select("ID", "gg_email", "gg_first_name_ru", "gg_patr_name_ru", "gg_last_name_ru", "gg_work_phone", "Director_full_nameId", "gg_position/gg_name_ru").expand("gg_position").orderBy("ID", true).getAll();
+        const allItems: any[] = await sp.web.lists.getByTitle("Сотрудники").items.select("ID", "gg_email", "gg_first_name_ru", "gg_patr_name_ru", "gg_last_name_ru", "gg_work_phone", "Director_full_nameId", "gg_position/gg_name_ru").expand("gg_position").orderBy("ID", true).getAll();
             let orgChartNodes: Array<ChartItem> = [];
             var count: number;
             for (count = 0; count < allItems.length; count++) {
               orgChartNodes.push(new ChartItem(
                 allItems[count].ID,
-                allItems[count].gg_first_name_ru,
-                allItems[count].gg_patr_name_ru,
-                allItems[count].gg_last_name_ru,
+                allItems[count].gg_first_name_ru ? allItems[count].gg_first_name_ru: "",
+                allItems[count].gg_patr_name_ru ? allItems[count].gg_patr_name_ru: "",
+                allItems[count].gg_last_name_ru ? allItems[count].gg_last_name_ru: "",
                 allItems[count].gg_email,
                 allItems[count].gg_work_phone, 
-                allItems[count].gg_name_ru, 
+                allItems[count].gg_position ? allItems[count].gg_position.gg_name_ru : "", 
                 allItems[count].Director_full_nameId
                 ));
             }
 
             userTree = orgChartNodes.filter(x => x.email === currentUser)[0];
             var firstUser = userTree;
+            renderManagersArray = new Array();
             renderManagersArray.push(firstUser);
             var user =  firstUser;
             var parentUser = orgChartNodes.filter(x => x.id === user.parent_id)[0];
@@ -45,14 +46,11 @@ export const useGetUserProperties  =  ():  { getUserProfile:getUserProfileFunc }
               parentUser = orgChartNodes.filter(x => x.id === user.parent_id)[0];
 
               renderManagersArray.push(user);
-              
             }
 
-          
-          console.log(userTree, "userTree");
-          console.log(renderManagersArray, "renderManagersArray");
-
-          return {userTree, renderManagersArray}
+              renderManagersArray.reverse();
+              console.log(renderManagersArray, "useGetUserProperties array");
+              return {userTree, renderManagersArray}
     },
     []
   );
