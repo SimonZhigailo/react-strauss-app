@@ -48,7 +48,7 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
         ev.preventDefault();
         ev.stopPropagation();
         window.open(
-          `https://teams.microsoft.com/l/chat/0/0?users=${userInfo.email}&message=Hi ${userInfo.title} `,
+          `https://teams.microsoft.com/l/chat/0/0?users=${userInfo.email}&message=Здравствуйте ${userInfo.title} `,
           "_blank"
         );
       },
@@ -121,11 +121,7 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
         className={personaCardStyles.tile}
         componentRef={documentCardRef}
         onClick={() => {
-          //  documentCardRef.current.focus();
-        //   if (userInfo.hasDirectReports) {
-        //     onUserSelected(userInfo);
-        //     //
-        //   }
+        // onUserSelected(userInfo);
         }}
       >
         <HoverCard

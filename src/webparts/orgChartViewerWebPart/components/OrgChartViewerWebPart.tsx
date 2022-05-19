@@ -128,53 +128,6 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
     ]
   );
 
-  // React.useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       if (startFromUserId === undefined)  return;
-  //       if (startFromUserId === ''){
-  //         dispatch({
-  //           type: EOrgChartTypes.SET_IS_LOADING,
-  //           payload: false,
-  //         });
-  //         dispatch({
-  //           type: EOrgChartTypes.SET_HAS_ERROR,
-  //           payload: {
-  //             hasError: true,
-  //             errorMessage: "User don't have email defined",
-  //           },
-  //         });
-  //         return;
-  //       }
-  //       const { currentUserProfile } = await getUserProfile(startFromUserId);
-  //       const wCurrentUser: IUserInfo = await manpingUserProperties(
-  //         currentUserProfile
-  //       );
-  //       dispatch({
-  //         type: EOrgChartTypes.SET_CURRENT_USER,
-  //         payload: wCurrentUser,
-  //       });
-  //       dispatch({
-  //         type: EOrgChartTypes.SET_HAS_ERROR,
-  //         payload: { hasError: false, errorMessage: "" },
-  //       });
-  //     } catch (error) {
-  //       console.log(error);
-  //       dispatch({
-  //         type: EOrgChartTypes.SET_IS_LOADING,
-  //         payload: false,
-  //       });
-  //       dispatch({
-  //         type: EOrgChartTypes.SET_HAS_ERROR,
-  //         payload: {
-  //           hasError: true,
-  //           errorMessage: "error",
-  //         },
-  //       });
-  //     }
-  //   })();
-  // }, [getUserProfile, startFromUserId]);
-
   React.useEffect(() => {
     console.log("start in useEffect");
     (async () => {

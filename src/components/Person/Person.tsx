@@ -14,7 +14,9 @@ export const Person: React.FunctionComponent<IPersonProps> = (
 
   const personProps: IPersonaSharedProps = React.useMemo(() => {
     return {
-      imageUrl: pictureUrl ? `/_layouts/15/userphoto.aspx?size=M&accountname=${userEmail}` : undefined,
+      // imageUrl: pictureUrl ? `/_layouts/15/userphoto.aspx?size=M&accountname=${userEmail}` : undefined,
+      imageUrl: `/_layouts/15/userphoto.aspx?size=M&accountname=${userEmail}`,
+
       text: text,
       secondaryText: secondaryText,
       tertiaryText: tertiaryText,
