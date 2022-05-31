@@ -52,8 +52,24 @@ import {
         )
   
       }
+
+      if (user?.officePhone){
+        actions.push(
+          {
+            iconProps: { iconName: "Home" },
+            title: "Call",
+            styles: buttonStylesHouver,
+            onClick: (ev)=> {
+              ev.preventDefault();
+              ev.stopPropagation();
+              window.open(`CALLTO:${user.officePhone}`,"_blank");
+            }
+          }
+        )
+  
+      }
       return actions;
-    },[buttonStylesHouver, user.title, user.email, user.workPhone]);
+    },[buttonStylesHouver, user.title, user.email, user.workPhone, user.officePhone]);
   
   
     return (
@@ -72,9 +88,9 @@ import {
                 styles={stackPersonaStyles}
               >
                 <Person
-                  text={user.title}
-                  secondaryText={user.email}
-                  tertiaryText={user.position}
+                  text={user.lastName + " " + user.firstName}
+                  secondaryText={user.position}
+                  tertiaryText={user.department}
                   userEmail={user.email}
                   pictureUrl={user.pictureUrl}
                   size={PersonaSize.size72}

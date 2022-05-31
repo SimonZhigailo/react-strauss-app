@@ -10,4 +10,6 @@ export interface IOrgChartViewerWebPartState {
     error:IErrorInfo;
     currentUser?: ChartItem;
     renderManagers:JSX.Element[];
+    renderSearchItems:JSX.Element[];
+    searchQuery: string;
 }

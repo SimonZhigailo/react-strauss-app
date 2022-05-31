@@ -16,7 +16,6 @@ export const Person: React.FunctionComponent<IPersonProps> = (
     return {
       // imageUrl: pictureUrl ? `/_layouts/15/userphoto.aspx?size=M&accountname=${userEmail}` : undefined,
       imageUrl: `/_layouts/15/userphoto.aspx?size=M&accountname=${userEmail}`,
-
       text: text,
       secondaryText: secondaryText,
       tertiaryText: tertiaryText,
@@ -29,9 +28,8 @@ export const Person: React.FunctionComponent<IPersonProps> = (
         <Text
           title={text}
           variant="mediumPlus"
+          styles={{ root: { fontWeight: 600, whiteSpace:"pre-wrap"} }}
           block
-          nowrap
-          styles={{ root: { fontWeight: 600 } }}
         >
           {text}
         </Text>
@@ -46,8 +44,7 @@ export const Person: React.FunctionComponent<IPersonProps> = (
           title={secondaryText}
           variant="smallPlus"
           block
-          nowrap
-          styles={{ root: { fontWeight: 400 } }}
+          styles={{ root: { fontWeight: 400, whiteSpace:"pre-wrap"} }}
         >
           {secondaryText}
         </Text>
@@ -55,18 +52,34 @@ export const Person: React.FunctionComponent<IPersonProps> = (
     );
   }, [secondaryText]);
 
+  const _onRenderTertiaryText = React.useCallback(() => {
+    return (
+      <>
+        <Text
+          title={tertiaryText}
+          variant="smallPlus"
+          block
+          styles={{ root: { fontWeight: 400, whiteSpace:"pre-wrap"} }}
+        >
+          {tertiaryText}
+        </Text>
+      </>
+    );
+  }, [tertiaryText]);
 
 
   return (
     <>
       <Persona
         {...personProps}
-        size={size || PersonaSize.size40}
+        size={size || PersonaSize.size48}
         onRenderPrimaryText={_onRenderPrimaryText}
         onRenderSecondaryText={_onRenderSecondaryText}
+        onRenderTertiaryText={_onRenderTertiaryText}
         styles={{
           secondaryText: { maxWidth: 230 },
           primaryText: { maxWidth: 230 },
+          tertiaryText: { maxWidth: 230 },
         }}
       />
     </>

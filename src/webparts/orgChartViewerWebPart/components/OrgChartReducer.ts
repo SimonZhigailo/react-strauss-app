@@ -13,8 +13,13 @@ export const OrgChartReducer = (
       return { ...state,  error: action.payload as IErrorInfo};
     case EOrgChartTypes.SET_CURRENT_USER:
       return { ...state, currentUser: action.payload  as ChartItem};
-      case EOrgChartTypes.SET_RENDER_MANAGERS:
-        return { ...state, renderManagers: action.payload as JSX.Element[] };
+    case EOrgChartTypes.SET_RENDER_MANAGERS:
+      return { ...state, renderManagers: action.payload as JSX.Element[] };
+    case EOrgChartTypes.SET_REDNDER_SEARCH_INFO:
+      return { ...state, renderSearchItems: action.payload as JSX.Element[] };
+    case EOrgChartTypes.SET_SEARCH_QUERY:
+      return { ...state, searchQuery: action.payload as string };
+      
     default:
       return state;
   }

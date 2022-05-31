@@ -1,8 +1,6 @@
 import { ChartItem } from "../../webparts/orgChartViewerWebPart/components/IOrgChartItem";
 
-export interface IPersonCardProps {
+export interface ISearchItemProps {
   userInfo: ChartItem;
   onUserSelected: (userMail: string) => void;
-  selectedUser?: ChartItem;
-  showActionsBar?: boolean;
 }

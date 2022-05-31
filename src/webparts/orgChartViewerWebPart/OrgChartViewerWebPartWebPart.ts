@@ -22,7 +22,8 @@ return Promise.resolve();
     const element: React.ReactElement<IOrgChartViewerWebPartProps> = React.createElement(
       OrgChartViewerWebPart,
       {
-        currentUserName: this.context.pageContext.user["email"],
+        // currentUserName: this.context.pageContext.user["email"],
+        currentUserName: "svetlana.abramova@strauss.coffee",  //заглушка!
         context: this.context,
         siteUrl: this.context.pageContext.web.absoluteUrl
       }

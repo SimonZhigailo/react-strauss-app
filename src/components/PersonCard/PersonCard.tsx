@@ -80,6 +80,19 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
       });
     }
 
+    if (userInfo?.officePhone) {
+      cardActions.push({
+        iconProps: { iconName: "Home" },
+        title: "Call",
+        styles: buttonStyles,
+        onClick: (ev) => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          window.open(`CALLTO:${userInfo.officePhone}`, "_blank");
+        },
+      });
+    }
+
     return cardActions;
   }, [
     buttonStyles,
@@ -87,6 +100,7 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
     userInfo.email,
     userInfo.position,
     userInfo.workPhone,
+    userInfo.officePhone
   ]);
 
   const onRenderCompactCard = React.useCallback(
@@ -121,7 +135,7 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
         className={personaCardStyles.tile}
         componentRef={documentCardRef}
         onClick={() => {
-        // onUserSelected(userInfo);
+        // onUserSelected(userInfo.email);
         }}
       >
         <HoverCard
@@ -135,8 +149,9 @@ export const PersonCard: React.FunctionComponent<IPersonCardProps> = (
               styles={stackPersonaStyles}
             >
               <Person
-                text={userInfo.title}
+                text={userInfo.lastName + " " + userInfo.firstName}
                 secondaryText={userInfo.position}
+                tertiaryText={userInfo.department}
                 userEmail={userInfo.email}
                 pictureUrl={userInfo.pictureUrl}
                 size={PersonaSize.size40}

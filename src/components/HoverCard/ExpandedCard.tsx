@@ -25,8 +25,6 @@ import {
   
     };
   
-    const { getUserProfile } = useGetUserProperties();
-    const [manager, setManager] = React.useState<ChartItem>();
   
     // React.useEffect(() => {
     //   if (!user.manager) {
@@ -91,6 +89,28 @@ import {
             </>
           )}
   
+          {user.officePhone && (
+            <>
+              <Stack
+                horizontal
+                horizontalAlign="start"
+                verticalAlign="center"
+                tokens={stackFieldTokens}
+                styles={{root:{padding: 5}}}
+              >
+                <FontIcon
+                  iconName="Home"
+                  className={hoverCardStyles.iconStyles}
+                />
+                <Link href={`CALLTO:${user.officePhone}`}   target="_blank"
+                  data-interception="off">
+                  <Text variant="smallPlus">{user.officePhone}</Text>
+                </Link>
+              </Stack>
+              <div className={hoverCardStyles.separatorHorizontal}></div>
+            </>
+          )}
+
         </Stack>
       </>
     );

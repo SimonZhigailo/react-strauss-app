@@ -1,8 +1,11 @@
 import * as React from 'react';
 import { IOrgChartViewerWebPartProps } from './IOrgChartViewerWebPartProps';
 import { IOrgChartViewerWebPartState } from './IOrgChartViewerWebPartState';
+import { SearchBox } from 'office-ui-fabric-react/lib/SearchBox';
+
 import {
   useGetUserProperties,
+  useGetUsersSearchInfo
 } from "../../../hooks";
 import {
   MessageBar,
@@ -12,6 +15,7 @@ import {
   SpinnerSize,
   Text,
 } from "office-ui-fabric-react";
+import styles from '../../../components/SearchInput/PeopleSearch.module.scss';
 import { EOrgChartTypes } from "./EOrgChartTypes";
 import { ChartItem } from './IOrgChartItem';
 import { OrgChartReducer } from "./OrgChartReducer";
@@ -19,12 +23,15 @@ import { IStackStyles, Stack } from "office-ui-fabric-react/lib/Stack";
 import { useOrgChartStyles } from "./useOrgChartStyles";
 import { getGUID } from "@pnp/common";
 import { PersonCard } from "../../../components/PersonCard/PersonCard";
+import { SearchItem } from '../../../components/SearchCard/SearchItem';
 
 const initialState: IOrgChartViewerWebPartState = {
   isLoading: true,
   currentUser: null,
   error: undefined,
-  renderManagers: []
+  renderManagers: [],
+  renderSearchItems: [],
+  searchQuery:""
 };
 
 const titleStyle: IStackStyles = {
@@ -36,24 +43,23 @@ const titleStyle: IStackStyles = {
 export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPartProps> = (
   props: IOrgChartViewerWebPartProps
 ) => {
-  console.log('Start!');
   const [state, dispatch] = React.useReducer(OrgChartReducer, initialState);
   const { orgChartClasses } = useOrgChartStyles();
   const { getUserProfile } = useGetUserProperties();
+  const { getUserSearhInfo } = useGetUsersSearchInfo();
 
-  const onUserSelected = React.useCallback((selectedUser: ChartItem) => {
-    dispatch({
-      type: EOrgChartTypes.SET_CURRENT_USER,
-      payload: selectedUser,
-    });
-    console.log("onUserSelected", selectedUser);
+  const onUserSelected = React.useCallback((userEmail: string) => {
+    loadOrgChart(userEmail);
   }, []);
+
 
   const {
     currentUser,
     renderManagers,
     isLoading,
     error,
+    renderSearchItems,
+    searchQuery
   }: IOrgChartViewerWebPartState = state;
 
   const {
@@ -70,8 +76,6 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
         selectedUser ?? currentUserName,
         siteUrl
       );
-      console.log(state.currentUser, "loadOrgChart:state.currentUser"); 
-
       try {
         renderManagersArray.forEach((element) => {
           wRenderManagers.push(
@@ -101,6 +105,14 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
           type: EOrgChartTypes.SET_IS_LOADING,
           payload: false,
         });
+        
+        dispatch({
+          type: EOrgChartTypes.SET_RENDER_MANAGERS,
+          payload: wRenderManagers,
+        });
+
+        ClearSearchBox();
+
       } catch (error) {
         console.log(error);
         dispatch({
@@ -128,8 +140,59 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
     ]
   );
 
+  const loadSearchUsers = React.useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    async (searchQuery: string): Promise<any> => {
+
+      dispatch({
+        type: EOrgChartTypes.SET_SEARCH_QUERY,
+        payload: searchQuery,
+      });
+      
+      const wRenderSearchManager: JSX.Element[] = [];
+      const { users } = await getUserSearhInfo(searchQuery);
+
+      users.forEach((element) => {
+        wRenderSearchManager.push(
+          <>
+            <SearchItem onUserSelected={onUserSelected} userInfo={element}
+            ></SearchItem>
+          </>
+        );
+      });
+
+      if(searchQuery === "")
+      {
+        wRenderSearchManager.length = 0;
+      }
+
+      dispatch({
+        type: EOrgChartTypes.SET_REDNDER_SEARCH_INFO,
+        payload: wRenderSearchManager,
+      });
+      return {wRenderSearchManager};
+    },
+
+    [
+      getUserSearhInfo,
+      onUserSelected,
+      searchQuery,
+    ]
+  );
+
+  const ClearSearchBox = () => {
+    dispatch({
+      type: EOrgChartTypes.SET_SEARCH_QUERY,
+      payload: "",
+    });
+    
+    dispatch({
+      type: EOrgChartTypes.SET_REDNDER_SEARCH_INFO,
+      payload: [],
+    });
+  }
+
   React.useEffect(() => {
-    console.log("start in useEffect");
     (async () => {
       dispatch({
         type: EOrgChartTypes.SET_IS_LOADING,
@@ -147,9 +210,24 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
         payload: false,
       });
     })();
-    console.log(currentUser);
   }, [currentUser, loadOrgChart]);
   
+const onTextChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+  if(e?.target?.value !== "")
+    loadSearchUsers(e.target.value);
+  else
+    ClearSearchBox();
+};
+
+const onTextSubmited = (e: React.ChangeEvent<HTMLInputElement>) => {
+  if(state.renderSearchItems.length != 0){
+    // onUserSelected()
+  }
+};
+
+const onClear = (e: React.ChangeEvent<HTMLInputElement>) => {
+  ClearSearchBox();
+};
 
   if (isLoading) {
     return (
@@ -184,11 +262,34 @@ export const OrgChartViewerWebPart: React.FunctionComponent<IOrgChartViewerWebPa
     return (
       <>
       <Stack  styles={{root:{padding: 20}}} >
-        <Stack horizontal horizontalAlign="center" styles={titleStyle}>
+      <>
+              <div className = { styles.peopleSearch } >
+              <div className={styles.container}>
+                <div className={styles.row}>
+                  <div className={styles.column}>
+            <SearchBox
+              className="react-search-box" 
+              value={searchQuery}
+              onChange={onTextChanged}
+              onSearch={onTextSubmited}
+              onClear={onClear}
+              // onBlur={onClear}
+              >
+            </SearchBox>
+                  {/* <SearchInput className="search-input" onChange={searchUpdated}/> */}
+                    <div className={styles.resultdiv}>
+                        {renderSearchItems}
+                      </div>
+                  </div>
+                </div>
+              </div>
+              </div >
+        </>
+        {/* <Stack horizontal horizontalAlign="center" styles={titleStyle}>
           <Text variant="xLarge" block>
             {"Иерархия Strauss"}
           </Text>
-        </Stack>
+        </Stack> */}
         <Stack horizontalAlign="center" verticalAlign="center">
         {renderManagers}
         </Stack>
